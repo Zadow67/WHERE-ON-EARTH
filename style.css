@@ -1,0 +1,129 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Press Start 2P", cursive;
+}
+
+body{
+    background-color: #f4ead3;
+    color: #33271d;
+}
+
+/* Main content */
+
+.landing-content {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.landing-content .top-tiny-text {
+    size: 10px;
+    color: #a83d32;
+    letter-spacing: 1.2;
+    margin-bottom: 28px;
+}
+
+.landing-content h1 {
+    font-size: 6em;
+    color: #33271d;
+    text-shadow: 5px 5px 0 #d9a441;
+    margin-bottom: 35px;
+}
+
+.landing-content .bottom-tiny-text {
+    font-family: "DM Mono", monospace;
+    size: 10px;
+    letter-spacing: 1.2;
+    margin-bottom: 58px;
+}
+
+h1 span {
+    color: #a83d32;
+}
+
+.play-button {
+    color: #f4ead3;
+    padding: 20px 35px;
+    background: #a83d32;
+    box-shadow: 7px 7px 0 #33271d;
+    border: 4px solid #33271d;
+    transition: 0.12s;
+    margin-bottom: 30px;
+}
+
+.play-button:hover {
+    transform: translate(3px, 3px);
+    box-shadow: 4px 4px 0 #33271d;
+    background: #91332b;
+}
+
+.play-button:active {
+    transform: translate(7px, 7px);
+    box-shadow: none;
+    background: #91332b;
+}
+
+
+/* footer */
+
+/* .footer-content {
+    flex: 2;
+} */
+
+.footer-content p {
+    color: #2f10ab;
+    text-align: center;
+    font-size: 10px;
+}
+
+/* Globe */
+
+.globe {
+    width: 155px;
+    height: 155px;
+    margin: 0 auto 45px;
+    border: 7px solid #33271d;
+    border-radius: 50%;
+    position: relative;
+    background: #526b48;
+    box-shadow: 8px 8px 0 #5c4935;
+    overflow: hidden;
+}
+
+.globe::before {
+    content: "";
+    position: absolute;
+    width: 55px;
+    height: 170px;
+    border: 5px solid #33271d;
+    border-radius: 50%;
+    left: 43px;
+    top: -14px;
+}
+
+.pin {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background: #a83d32;
+    border: 4px solid #33271d;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    left: 61px;
+    top: 48px;
+    z-index: 4;
+}
+
+.globe::after {
+    content: "";
+    position: absolute;
+    width: 160px;
+    height: 55px;
+    border: 5px solid #33271d;
+    border-radius: 50%;
+    left: -9px;
+    top: 42px;
+}
