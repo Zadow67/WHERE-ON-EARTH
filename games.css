@@ -1,12 +1,20 @@
+html,
+body {
+    height: 100%;
+}
+
 * {
     margin: 0;
     padding: 0;
     font-family: "Press Start 2P", cursive;
+    box-sizing: border-box;
 }
 
-body{
+body {
     background-color: #f4ead3;
     color: #33271d;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Header */
@@ -31,7 +39,8 @@ body{
 
 main {
     background-color: blue;
-    height: 100vh;
+    flex: 1;
+    min-height: 0;
 }
 
 .game-grid {
@@ -42,14 +51,20 @@ main {
 
 .street-veiw-box {
     margin: 30px;
-    display: inline-block;
     background-color: green;
     border: 5px solid #5c4935;
 }
 
+/* map view box */
+
 .map-view-box {
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
     background-color: red;
     border: 5px solid #5c4935;
+}
 
+
+.map-view {
+flex: 1;
 }

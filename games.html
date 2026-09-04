@@ -7,7 +7,10 @@
     <title>WhereOnEarth</title>
 
     <link rel="stylesheet" href="games.css">
-
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
 <link rel="preconnect" href="https://fonts.googleapis.com"> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 
@@ -21,22 +24,30 @@
     </header>
     <main>
     <div class="game-grid">
-        <div class="street-veiw-box"></div>
+        <div class="street-veiw-box">
+        <iframe id="street-view"
+        id="streetview"
+        width="100%"
+        height="100%"
+        style="border:0"
+        allowfullscreen>
+        </iframe>
+        </div>
         <div class="map-view-box">
             <div class="map-header">
-                <p>
-                </p>
+                <p>Make your guess</p>
                 <button></button>
                 <button></button>
             </div>
-            <div clas="map-veiw">
-                <div class="pointer"></div>
-            </div>
+        <div class="map-view"></div>
+
             <div class="make-guess">
-                <button></button>
+                <button>Make Guess</button>
             </div>
         </div>
     </div>
     </main>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="games.js"></script>
 </body>
 </html>
