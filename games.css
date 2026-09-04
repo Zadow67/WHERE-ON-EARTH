@@ -36,14 +36,20 @@ main {
 
 .game-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 2fr 1fr;
     height: 100%;
 }
 
 .street-veiw-box {
+    margin: 30px;
+    display: inline-block;
     background-color: green;
+    border: 5px solid #5c4935;
 }
 
 .map-view-box {
+    display: inline-block;
     background-color: red;
+    border: 5px solid #5c4935;
+
 }
