@@ -40,8 +40,20 @@ const locations = [
     [38.653047,-121.539730],
 ];
 
+let playLocations;
+let currentRound = 1;
 
-let guessedLocation = 0;
+// Map sutff
+let guessedLocation;
+let guessed = false;
+const mapElement = document.querySelector(".map-view");
+const scoreNumber = document.getElementById("scoreNumber")
+let score = 0;
+const currentRoundElement = document.getElementById("currentRound")
+const nextRoundBtn = document.getElementById("nextRound");
+
+
+const map = L.map(mapElement);
 const streetView = document.getElementById('street-view');
 
 function getHaversineDistance(lat1, lon1, lat2, lon2) {
@@ -59,43 +71,89 @@ function getHaversineDistance(lat1, lon1, lat2, lon2) {
     return R * c;
 }
 
-function randomLocation(apikey) {
-    let location = locations[Math.floor(Math.random() * locations.length)]
+function fiveRandomLocation() {
+    let location1;
+    let location2;
+    let location3;
+    let location4;
+    let location5;
 
-    console.log(location)
-    const url = `https://www.google.com/maps/embed/v1/streetview?key=${apikey}&location=${location[0]},${location[1]}`
-    streetView.setAttribute('src',url)
-    return location;
+    while(location1 === location2 || location1 === location3 || location1 === location4 || location1 === location5 || location2 === location3 || location2 === location4 || location2 === location5 || location3 === location4 || location3 === location5 || location4 === location5) {
+        location1 = locations[Math.floor(Math.random() * locations.length)]
+        location2 = locations[Math.floor(Math.random() * locations.length)]
+        location3 = locations[Math.floor(Math.random() * locations.length)]
+        location4 = locations[Math.floor(Math.random() * locations.length)]
+        location5 = locations[Math.floor(Math.random() * locations.length)]
+    }
+    playLocations = [location1,location2,location3,location4,location5];
+    console.log(playLocations)
+
+    return playLocations;
+
 }
 
-const currentLocation = randomLocation("AIzaSyC5671eu0WOtBBmFtrIjuTzgkhBsdF7Z3U");
+function main() {
+guessed = false;
+playLocations = fiveRandomLocation()
+currentLocation = playLocations[currentRound-1]
+getStreetView("AIzaSyC5671eu0WOtBBmFtrIjuTzgkhBsdF7Z3U",currentLocation)
+getMap(currentLocation)
+}
+
+function getStreetView(apikey,Currentlocation) {
+    console.log(Currentlocation)
+    const url = `https://www.google.com/maps/embed/v1/streetview?key=${apikey}&location=${Currentlocation[0]},${Currentlocation[1]}`
+    streetView.setAttribute('src',url)
+    return Currentlocation;
+}
+
+function getMap(Currentlocation) {
+    map.setView(Currentlocation, 5);
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "&copy; OpenStreetMap contributors"
+    }).addTo(map);
+}
+
+function scoreCal(distance) {
+    score = score + distance;
+    scoreNumber.textContent = score;
+}
+
 
 
 function getGuessDistance(location,guessedLocation) {
     const distance = getHaversineDistance(location[0],location[1],guessedLocation[0],guessedLocation[1])
     console.log(`Distance: ${distance.toFixed(2)} km`);
+    return distance.toFixed(0);
 }
 
 
 
-
-const mapElement = document.querySelector(".map-view");
-
-const map = L.map(mapElement);
-
-map.setView(currentLocation, 5);
-L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "&copy; OpenStreetMap contributors"
-}).addTo(map);
-
-var popup = L.popup()
-    .setLatLng(currentLocation)
-    .setContent('<p>Hello world!<br />This is a made by Zadow.</p>')
-    .openOn(map);
-
-
 map.on("click", function(event) {
-    guessedLocation = [event.latlng.lat, event.latlng.lng];
-    getGuessDistance(currentLocation, guessedLocation);
-    L.marker(guessedLocation).addTo(map);
+    if (!guessed || currentRound>5) {
+        guessedLocation = [event.latlng.lat, event.latlng.lng];
+        var distance = getGuessDistance(currentLocation, guessedLocation);
+
+        guessMarker = L.marker(guessedLocation).addTo(map);
+        guessLine = L.polyline([currentLocation, guessedLocation], {color:'red',weight: 3,dashArray: '5, 10' }).addTo(map);
+        guessed = true;
+        L.popup().setLatLng(currentLocation).setContent(`<p>You Were:${distance}KM away</p>`).openOn(map);
+        scoreCal(Number(distance));
+    }   
 });
+
+
+nextRoundBtn.onclick = function () {
+    if (!guessed) {
+        alert("Please make a guess first!");
+        return;
+    }
+    if (currentRound >= 5) {
+        return;
+    }
+    currentRound++;
+    currentRoundElement.textContent = "0"+currentRound;
+    main();
+}
+
+main()

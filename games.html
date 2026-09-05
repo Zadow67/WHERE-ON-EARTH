@@ -18,19 +18,19 @@
     <header>
         <div class="header-content">
             <p class="logo">WHERE<span>ON</span>EARTH?</p>
-            <p class="round">Round 01 / 05</p>
-            <p class="score">SCORE 00000</p>
+            <p class="round">Round <span id="currentRound">01</span> / 05</p>
+            <p class="score">SCORE <span id="scoreNumber">00000</span></p>
         </div>
     </header>
     <main>
     <div class="game-grid">
         <div class="street-veiw-box">
-        <iframe id="street-view"
-        id="streetview"
-        width="100%"
-        height="100%"
-        style="border:0"
-        allowfullscreen>
+        <iframe
+            id="street-view"
+            width="100%"
+            height="100%"
+            style="border:0"
+            allowfullscreen>
         </iframe>
         </div>
         <div class="map-view-box">
@@ -42,7 +42,7 @@
         <div class="map-view"></div>
 
             <div class="make-guess">
-                <button>Make Guess</button>
+                <button id="nextRound">Make Guess</button>
             </div>
         </div>
     </div>
