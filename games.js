@@ -43,10 +43,26 @@ const locations = [
 let playLocations;
 let currentRound = 1;
 
+
+// test
+
+const overlay = document.getElementById("scoreOverlay");
+const nextRoundbtn = document.getElementById("nextRoundbtn");
+const scoreReaction = document.getElementById("scoreReaction");
+const scoreDistance = document.getElementById("scoreDistance");
+const scoreAdd = document.getElementById("scoreAdd")
+const resultScreen = document.getElementById("resultScreen")
+const restartBtn = document.getElementById("restartBtn")
+
 // Map sutff
-let guessedLocation;
+let guessedLocation = null;
 let guessed = false;
 let conGuessed = false;
+
+let guessMarker = null;
+let guessLine = null;
+let currentLocation = null;
+
 const mapElement = document.querySelector(".map-view");
 const scoreNumber = document.getElementById("scoreNumber")
 const finalScore = document.getElementById("finalScore");
@@ -54,6 +70,7 @@ let score = 0;
 const currentRoundElement = document.getElementById("currentRound")
 const makeGuessBtn = document.getElementById("makeGuess");
 let allRoundCompleted = false;
+
 
 const map = L.map(mapElement);
 const streetView = document.getElementById('street-view');
@@ -100,10 +117,10 @@ function fiveRandomLocation() {
 
 
 function main() {
-guessed = false;
-currentLocation = playLocations[currentRound-1]
-getStreetView("AIzaSyC5671eu0WOtBBmFtrIjuTzgkhBsdF7Z3U",currentLocation)
-getMap(currentLocation)
+    guessed = false;
+    currentLocation = playLocations[currentRound-1]
+    getStreetView("AIzaSyC5671eu0WOtBBmFtrIjuTzgkhBsdF7Z3U",currentLocation)
+    getMap(currentLocation)
 }
 
 function getStreetView(apikey,Currentlocation) {
@@ -176,7 +193,7 @@ makeGuessBtn.onclick = function () {
         guessLine = L.polyline([currentLocation, guessedLocation], {color:'red',weight: 3,dashArray: '5, 10' }).addTo(map);
         L.popup().setLatLng(currentLocation).setContent(`<p>You Were:${distance}KM away</p>`).openOn(map);
         var score = scoreCal(Number(distance));
-        confirmDelete("GREAT GUESS!",distance,score)
+        makePopup("GREAT GUESS!",distance,score)
         conGuessed = true
 
     }
@@ -191,21 +208,9 @@ makeGuessBtn.onclick = function () {
     }
 }
 
-main()
-
-
-
 // test
 
-const overlay = document.getElementById("scoreOverlay");
-const nextRoundbtn = document.getElementById("nextRoundbtn");
-const scoreReaction = document.getElementById("scoreReaction");
-const scoreDistance = document.getElementById("scoreDistance");
-const scoreAdd = document.getElementById("scoreAdd")
-const resultScreen = document.getElementById("resultScreen")
-const restartBtn = document.getElementById("restartBtn")
-
-function confirmDelete(reaction,distance,score){
+function makePopup(reaction,distance,score){
     overlay.style.display = "flex";
     scoreReaction.textContent = reaction;
     scoreDistance.textContent = distance + " Km";
@@ -234,10 +239,7 @@ restartBtn.onclick = function () {
     conGuessed=false;
     guessedLocation=null;
     allRoundCompleted = false;
-    if (window.guessMarker) map.removeLayer(guessMarker);
-    if (window.guessLine) map.removeLayer(guessLine);
-    map.closePopup();
-
+    clearMap();
     scoreNumber.textContent = score;
     currentRoundElement.textContent = "0" + currentRound;
     nextRoundbtn.textContent = "Next Round";
@@ -247,3 +249,17 @@ restartBtn.onclick = function () {
     playLocations = fiveRandomLocation();
     main();
 }
+
+function clearMap() {
+    map.eachLayer(function (layer) {
+        if (layer instanceof L.Marker || layer instanceof L.Polyline) {
+            map.removeLayer(layer);
+        }
+    });
+
+    map.closePopup();
+}
+
+main()
+
+
