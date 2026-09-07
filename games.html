@@ -29,24 +29,44 @@
             id="street-view"
             width="100%"
             height="100%"
-            style="border:0"
+            style="border:5px solid #33271d;"
             allowfullscreen>
         </iframe>
         </div>
         <div class="map-view-box">
             <div class="map-header">
                 <p>Make your guess</p>
-                <button></button>
-                <button></button>
             </div>
         <div class="map-view"></div>
 
-            <div class="make-guess">
-                <button id="nextRound">Make Guess</button>
+            <div class="make-guess-box">
+                <button id="makeGuess">Make Guess</button>
             </div>
         </div>
     </div>
     </main>
+<!-- Overlay -->
+<div id="scoreOverlay" class="overlay">
+        <div class="nextRoundBox">
+            <p id="scoreReaction"></p>
+            <p class="result-distance"><span id="scoreDistance"></span> away</p>
+            <p id="scoreAdd"></p>
+            <button id="nextRoundbtn">NEXT ROUND</button>
+        </div>
+    </div>
+
+<!-- The Result page -->
+
+<div class="result-screen" id="resultScreen">
+        <div class="result-content">
+            <div class="result-small">MISSION COMPLETE</div>
+            <h1 class="result-title">WHERE<br>ON EARTH?</h1>
+            <div class="result-score" id="finalScore">05707</div>
+            <!-- <div class="final-stats" id="finalStats"></div> -->
+            <button class="restart-button" id="restartBtn">PLAY AGAIN</button>
+        </div>
+    </div>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="games.js"></script>
 </body>

@@ -46,15 +46,20 @@ let currentRound = 1;
 // Map sutff
 let guessedLocation;
 let guessed = false;
+let conGuessed = false;
 const mapElement = document.querySelector(".map-view");
 const scoreNumber = document.getElementById("scoreNumber")
+const finalScore = document.getElementById("finalScore");
 let score = 0;
 const currentRoundElement = document.getElementById("currentRound")
-const nextRoundBtn = document.getElementById("nextRound");
-
+const makeGuessBtn = document.getElementById("makeGuess");
+let allRoundCompleted = false;
 
 const map = L.map(mapElement);
 const streetView = document.getElementById('street-view');
+
+playLocations = fiveRandomLocation()
+
 
 function getHaversineDistance(lat1, lon1, lat2, lon2) {
     const R = 6371;
@@ -78,23 +83,24 @@ function fiveRandomLocation() {
     let location4;
     let location5;
 
-    while(location1 === location2 || location1 === location3 || location1 === location4 || location1 === location5 || location2 === location3 || location2 === location4 || location2 === location5 || location3 === location4 || location3 === location5 || location4 === location5) {
+    do {
         location1 = locations[Math.floor(Math.random() * locations.length)]
         location2 = locations[Math.floor(Math.random() * locations.length)]
         location3 = locations[Math.floor(Math.random() * locations.length)]
         location4 = locations[Math.floor(Math.random() * locations.length)]
         location5 = locations[Math.floor(Math.random() * locations.length)]
     }
+    while(location1 === location2 || location1 === location3 || location1 === location4 || location1 === location5 || location2 === location3 || location2 === location4 || location2 === location5 || location3 === location4 || location3 === location5 || location4 === location5); 
+
     playLocations = [location1,location2,location3,location4,location5];
     console.log(playLocations)
 
     return playLocations;
-
 }
+
 
 function main() {
 guessed = false;
-playLocations = fiveRandomLocation()
 currentLocation = playLocations[currentRound-1]
 getStreetView("AIzaSyC5671eu0WOtBBmFtrIjuTzgkhBsdF7Z3U",currentLocation)
 getMap(currentLocation)
@@ -115,10 +121,24 @@ function getMap(Currentlocation) {
 }
 
 function scoreCal(distance) {
-    score = score + distance;
-    scoreNumber.textContent = score;
-}
+    const MAX_SCORE = 1000;
+    const MAX_ALLOWED_DISTANCE = 5000;
+    let roundScore = 0;
 
+    if (distance <= 0) {
+        roundScore = MAX_SCORE;
+    } else if (distance < MAX_ALLOWED_DISTANCE) {
+        let accuracy = (MAX_ALLOWED_DISTANCE - distance) / MAX_ALLOWED_DISTANCE;
+        roundScore = Math.round(MAX_SCORE * accuracy);
+    } else {
+        roundScore = 0;
+    }
+
+    score += roundScore;
+    scoreNumber.textContent = score;
+    finalScore.textContent = "Score:"+score;
+    return roundScore;
+}
 
 
 function getGuessDistance(location,guessedLocation) {
@@ -130,30 +150,100 @@ function getGuessDistance(location,guessedLocation) {
 
 
 map.on("click", function(event) {
-    if (!guessed || currentRound>5) {
+    if (!conGuessed || currentRound>5) {
+        if(guessed) {
+            map.removeLayer(guessMarker);
+            // map.removeLayer(guessLine);
+        }
         guessedLocation = [event.latlng.lat, event.latlng.lng];
-        var distance = getGuessDistance(currentLocation, guessedLocation);
-
         guessMarker = L.marker(guessedLocation).addTo(map);
-        guessLine = L.polyline([currentLocation, guessedLocation], {color:'red',weight: 3,dashArray: '5, 10' }).addTo(map);
         guessed = true;
-        L.popup().setLatLng(currentLocation).setContent(`<p>You Were:${distance}KM away</p>`).openOn(map);
-        scoreCal(Number(distance));
+        // guessLine = L.polyline([currentLocation, guessedLocation], {color:'red',weight: 3,dashArray: '5, 10' }).addTo(map);
+        // L.popup().setLatLng(currentLocation).setContent(`<p>You Were:${distance}KM away</p>`).openOn(map);
+        // scoreCal(Number(distance));
     }   
 });
 
 
-nextRoundBtn.onclick = function () {
+makeGuessBtn.onclick = function () {
     if (!guessed) {
         alert("Please make a guess first!");
         return;
     }
-    if (currentRound >= 5) {
-        return;
+
+    if (guessed) {
+        var distance = getGuessDistance(currentLocation, guessedLocation);
+        guessLine = L.polyline([currentLocation, guessedLocation], {color:'red',weight: 3,dashArray: '5, 10' }).addTo(map);
+        L.popup().setLatLng(currentLocation).setContent(`<p>You Were:${distance}KM away</p>`).openOn(map);
+        var score = scoreCal(Number(distance));
+        confirmDelete("GREAT GUESS!",distance,score)
+        conGuessed = true
+
     }
+    if (currentRound <5) {
     currentRound++;
     currentRoundElement.textContent = "0"+currentRound;
-    main();
+    }
+    else {
+        allRoundCompleted = true;
+        nextRoundbtn.textContent = "View Result" 
+        nextRoundbtn.style.backgroundColor = "#19953e";
+    }
 }
 
 main()
+
+
+
+// test
+
+const overlay = document.getElementById("scoreOverlay");
+const nextRoundbtn = document.getElementById("nextRoundbtn");
+const scoreReaction = document.getElementById("scoreReaction");
+const scoreDistance = document.getElementById("scoreDistance");
+const scoreAdd = document.getElementById("scoreAdd")
+const resultScreen = document.getElementById("resultScreen")
+const restartBtn = document.getElementById("restartBtn")
+
+function confirmDelete(reaction,distance,score){
+    overlay.style.display = "flex";
+    scoreReaction.textContent = reaction;
+    scoreDistance.textContent = distance + " Km";
+    scoreAdd.textContent = "+"+score;
+
+    }
+
+
+nextRoundbtn.onclick = function() {
+    overlay.style.display = "none";
+    conGuessed = false;
+
+    if(allRoundCompleted) {
+        resultScreen.style.display = "flex"
+    }
+    else {
+        main()
+    }
+    }
+
+restartBtn.onclick = function () {
+    resultScreen.style.display = "none"
+    currentRound= 1;
+    score= 0;
+    guessed=false;
+    conGuessed=false;
+    guessedLocation=null;
+    allRoundCompleted = false;
+    if (window.guessMarker) map.removeLayer(guessMarker);
+    if (window.guessLine) map.removeLayer(guessLine);
+    map.closePopup();
+
+    scoreNumber.textContent = score;
+    currentRoundElement.textContent = "0" + currentRound;
+    nextRoundbtn.textContent = "Next Round";
+    nextRoundbtn.removeAttribute("style"); 
+    overlay.style.display = "none";
+
+    playLocations = fiveRandomLocation();
+    main();
+}
