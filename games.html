@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,46 +8,50 @@
     <title>WhereOnEarth</title>
 
     <link rel="stylesheet" href="games.css">
-<link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
-<link rel="preconnect" href="https://fonts.googleapis.com"> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Press+Start+2P&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
     <header>
         <div class="header-content">
-            <p class="logo">WHERE<span>ON</span>EARTH?</p>
+            <a href="index.html">
+                <p class="logo">WHERE<span>ON</span>EARTH?</p>
+            </a>
             <p class="round">Round <span id="currentRound">01</span> / 05</p>
-            <p class="score">SCORE <span id="scoreNumber">00000</span></p>
+            <div class="score-audio">
+                <svg id="audioIcon" width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 12H10L17 6V26L10 20H5V12Z" fill="currentColor" />
+                    <path d="M21 11V21" stroke="currentColor" stroke-width="3" stroke-linecap="square" />
+                    <path d="M25 8V24" stroke="currentColor" stroke-width="3" stroke-linecap="square" />
+                </svg>
+                <p class="score">SCORE <span id="scoreNumber">00000</span></p>
+            </div>
         </div>
     </header>
     <main>
-    <div class="game-grid">
-        <div class="street-veiw-box">
-        <iframe
-            id="street-view"
-            width="100%"
-            height="100%"
-            style="border:5px solid #33271d;"
-            allowfullscreen>
-        </iframe>
-        </div>
-        <div class="map-view-box">
-            <div class="map-header">
-                <p>Make your guess</p>
+        <div class="game-grid">
+            <div class="street-veiw-box">
+                <iframe id="street-view" width="100%" height="100%" style="border:5px solid #33271d;" allowfullscreen>
+                </iframe>
             </div>
-        <div class="map-view"></div>
+            <div class="map-view-box">
+                <div class="map-header">
+                    <p>Make your guess</p>
+                </div>
+                <div class="map-view"></div>
 
-            <div class="make-guess-box">
-                <button id="makeGuess">Make Guess</button>
+                <div class="make-guess-box">
+                    <button id="makeGuess">Make Guess</button>
+                </div>
             </div>
         </div>
-    </div>
     </main>
-<!-- Overlay -->
-<div id="scoreOverlay" class="overlay">
+    <!-- Overlay -->
+    <div id="scoreOverlay" class="overlay">
         <div class="nextRoundBox">
             <p id="scoreReaction"></p>
             <p class="result-distance"><span id="scoreDistance"></span> away</p>
@@ -55,9 +60,9 @@
         </div>
     </div>
 
-<!-- The Result page -->
+    <!-- The Result page -->
 
-<div class="result-screen" id="resultScreen">
+    <div class="result-screen" id="resultScreen">
         <div class="result-content">
             <div class="result-small">MISSION COMPLETE</div>
             <h1 class="result-title">WHERE<br>ON EARTH?</h1>
@@ -65,11 +70,27 @@
             <!-- <div class="final-stats" id="finalStats"></div> -->
             <button class="restart-button" id="restartBtn">PLAY AGAIN</button>
         </div>
-    </div>
-    <audio autoplay loop>
+        <!-- <div class="showSupport">
+        <div class="support-box">
+                <div class="support-text">
+                </div>
+        </div>
+    </div> -->
+        <audio id="bgAudio" autoplay loop>
         <source src="bg.mp3" type="audio/mpeg">
     </audio>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="games.js"></script>
+    <audio id="clickAudio">
+        <source src="click.wav" type="audio/mpeg">
+    </audio>
+    <audio id="guessAudio">
+        <source src="guess.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="guessedAudio">
+        <source src="guessed.mp3" type="audio/mpeg">
+    </audio>
+
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        <script src="games.js"></script>
 </body>
+
 </html>

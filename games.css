@@ -36,6 +36,9 @@ body {
     color: #a83d32;
 }
 
+a {
+  text-decoration: none;
+}
 /* main */
 
 main {
@@ -208,4 +211,18 @@ main {
 .restart-button:hover {
     transform: translate(2px,2px);
     box-shadow: 4px 4px 0 #33271d;
+}
+
+.score-audio {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+#audioIcon {
+    cursor: pointer;
+}
+
+#audioIcon:hover {
+    transform: scale(1.1);
 }
